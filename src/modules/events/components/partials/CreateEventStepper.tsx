@@ -2,29 +2,29 @@ import FormStepper, { FormStep } from '@common/components/lib/navigation/FormSte
 import Routes from '@common/defs/routes';
 import Step1 from '@modules/users/components/partials/create/Step1';
 import Step2 from '@modules/users/components/partials/create/Step2';
-import useUsers, { CreateOneInput } from '@modules/users/hooks/api/useUsers';
+import useEvents, { CreateOneInput } from '@modules/events/hooks/api/useEvents';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-enum CREATE_USER_STEP_ID {
+enum CREATE_Event_STEP_ID {
   STEP1 = 'step1',
   STEP2 = 'step2',
 }
 
-interface CreateUserStepperProps {}
-const CreateUserStepper = (_props: CreateUserStepperProps) => {
-  const { createOne } = useUsers();
+interface CreateEventStepperProps {}
+const CreateEventStepper = (_props: CreateEventStepperProps) => {
+  const { createOne } = useEvents();
   const router = useRouter();
   const { t } = useTranslation(['user']);
 
-  const steps: FormStep<CREATE_USER_STEP_ID>[] = [
+  const steps: FormStep<CREATE_Event_STEP_ID>[] = [
     {
-      id: CREATE_USER_STEP_ID.STEP1,
+      id: CREATE_Event_STEP_ID.STEP1,
       label: t('user:form.step1_label'),
       component: Step1,
     },
     {
-      id: CREATE_USER_STEP_ID.STEP2,
+      id: CREATE_Event_STEP_ID.STEP2,
       label: t('user:form.step2_label'),
       component: Step2,
     },
@@ -43,7 +43,7 @@ const CreateUserStepper = (_props: CreateUserStepperProps) => {
   };
   return (
     <>
-      <FormStepper<CreateOneInput, CREATE_USER_STEP_ID>
+      <FormStepper<CreateOneInput, CREATE_Event_STEP_ID>
         id="create-user-stepper"
         steps={steps}
         onSubmit={onSubmit}
@@ -52,4 +52,4 @@ const CreateUserStepper = (_props: CreateUserStepperProps) => {
   );
 };
 
-export default CreateUserStepper;
+export default CreateEventStepper;

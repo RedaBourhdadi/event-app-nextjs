@@ -145,6 +145,9 @@ const UpsertCrudItemForm = <
   }, [data]);
 
   const onSubmit = async (data: CreateOneInput | UpdateOneInput) => {
+    console.log('onPreSubmitZZZZZZZZZZZZ');
+    console.log(data);
+
     if (onPreSubmit) {
       const preSubmitResponse = onPreSubmit(data);
       const error = preSubmitResponse.error;
@@ -207,7 +210,9 @@ const UpsertCrudItemForm = <
     submit: async () => {
       let errors = {};
       await handleSubmit(
-        async () => {},
+        async () => {
+          console.log(`ssssssssssssss`);
+        },
         async (formErrors) => {
           errors = formErrors;
         }

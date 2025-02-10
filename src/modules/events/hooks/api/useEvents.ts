@@ -6,8 +6,13 @@ import useSWRImmutable from 'swr';
 import { useEffect, useState } from 'react';
 
 export interface CreateOneInput {
-  name?: string;
-  file: File;
+  // name?: string;
+  // file: File;
+  title: string;
+  location: string;
+  date: Date;
+  maxAttendees: number;
+  userId: number;
 }
 
 export type UpdateOneInput = CreateOneInput;
@@ -55,24 +60,19 @@ const useEvents = (opts: UseUploadsOptions = defaultOptions): UseUploadsResponse
     setItems(data ?? null);
   }, [data]);
 
-  const createOne = async (
-    input: CreateOneInput,
-    options?: FetchApiOptions
-  ): Promise<ApiResponse<{ item: Event }>> => {
-    const formData = new FormData();
-    formData.append('file', input.file);
-    const response = await fetchApi<{ item: Event }>(ApiRoutes.Uploads.CreateOne, {
-      method: 'POST',
-      data: formData,
-      ...options,
-    });
+ const createOne = async (input: CreateOneInput, options?: FetchApiOptions) => {
+   const response = await fetchApi<ItemData<Event>>('/events', {
+     method: 'POST',
+     data: input,
+     ...options,
+   });
 
-    if (response.success) {
-      mutate();
-    }
+   if (response.success) {
+     mutateAndRefetch();
+   }
 
-    return response;
-  };
+   return response;
+ };
 
   const readOne = async (id: Id, options?: FetchApiOptions) => {
     const response = await fetchApi<{ item: Event }>(
@@ -98,7 +98,7 @@ const useEvents = (opts: UseUploadsOptions = defaultOptions): UseUploadsResponse
     options?: FetchApiOptions
   ): Promise<ApiResponse<{ item: Event }>> => {
     const formData = new FormData();
-    formData.append('file', input.file);
+    // formData.append('file', input.file);
     const response = await fetchApi<{ item: Event }>(
       ApiRoutes.Uploads.UpdateOne.replace('{id}', id.toString()),
       {

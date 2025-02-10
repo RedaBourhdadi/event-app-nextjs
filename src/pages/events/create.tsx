@@ -7,9 +7,10 @@ import CustomBreadcrumbs from '@common/components/lib/navigation/CustomBreadCrum
 import { CRUD_ACTION } from '@common/defs/types';
 import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
-import CreateUserStepper from '@modules/users/components/partials/CreateUserStepper';
+import CreateUserStepper from '@modules/events/components/partials/CreateEventStepper';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
+import CreateUserForm from '@modules/events/components/partials/CreateEventForm';
 
 const UsersPage: NextPage = () => {
   const { t } = useTranslation(['user', 'common']);
@@ -24,8 +25,8 @@ const UsersPage: NextPage = () => {
           { name: t(`user:${Labels.Users.NewOne}`) },
         ]}
       />
-      <CreateUserStepper />
-      {/* <CreateUserForm /> */}
+      {/* <CreateUserStepper /> */}
+      <CreateUserForm />
     </>
   );
 };

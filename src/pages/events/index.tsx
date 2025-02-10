@@ -81,7 +81,8 @@ const UsersPage: NextPage = () => {
         action={{
           label: t(`user:${Labels.Users.NewOne}`),
           startIcon: <Add />,
-          onClick: () => router.push(Routes.Users.CreateOne),
+          // onClick: () => router.push(Routes.Users.CreateOne),
+          onClick: () => router.push('events/create'),
           permission: {
             entity: Namespaces.Users,
             action: CRUD_ACTION.CREATE,
