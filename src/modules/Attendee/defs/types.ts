@@ -10,7 +10,7 @@ export interface Event extends CrudObject {
   // createdAt?: string;
   // updatedAt?: string;
 }
-export interface Sub extends CrudObject {
+export interface sub extends CrudObject {
   // id: number;
   eventId: number;
   userId: number;

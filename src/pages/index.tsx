@@ -21,5 +21,6 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
 });
 export default withAuth(Index, {
   mode: AUTH_MODE.LOGGED_IN,
-  redirectUrl: Routes.Auth.Login,
+  // redirectUrl: Routes.Auth.Login,
+  redirectUrl: '/events',
 });

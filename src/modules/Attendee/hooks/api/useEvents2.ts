@@ -10,10 +10,6 @@ export interface CreateOneInput {
   maxAttendees: number;
   userId: number;
 }
-export interface CreateOneInputSub {
-  eventId: number;
-  userId: number;
-}
 
 export interface UpdateOneInput {
   title: string;
@@ -33,11 +29,11 @@ const useEvents2: UseItems<Event, CreateOneInput, UpdateOneInput> = (
   return useItemsHook;
 };
 
-export const usesubEvens: UseItems<Sub, CreateOneInputSub, UpdateOneInput> = (
+export const usesubEvens: UseItems<Sub, CreateOneInput, UpdateOneInput> = (
   opts: UseItemsOptions = defaultOptions
 ) => {
-  const apiRoutes = ApiRoutes.Attendees;
-  const useItemsHook = useItems<Sub, CreateOneInputSub, UpdateOneInput>(apiRoutes, opts);
+  const apiRoutes = ApiRoutes.Events;
+  const useItemsHook = useItems<Sub, CreateOneInput, UpdateOneInput>(apiRoutes, opts);
   return useItemsHook;
 };
 
