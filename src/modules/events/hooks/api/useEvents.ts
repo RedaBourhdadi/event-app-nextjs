@@ -88,7 +88,7 @@ const useEvents = (opts: UseUploadsOptions = defaultOptions): UseUploadsResponse
     return response;
   };
   const readAll = async (options?: FetchApiOptions) => {
-    const response = await fetchApi<{ items: Event[] }>('/events', options);
+    const response = await fetchApi<{ items: Event[] }>('/', options);
 
     if (response.success) {
       setItems(response.data?.items ?? null);

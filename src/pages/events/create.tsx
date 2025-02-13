@@ -37,16 +37,18 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
   },
 });
 
-export default withAuth(
-  withPermissions(UsersPage, {
-    requiredPermissions: {
-      entity: Namespaces.Users,
-      action: CRUD_ACTION.CREATE,
-    },
-    redirectUrl: Routes.Permissions.Forbidden,
-  }),
-  {
-    mode: AUTH_MODE.LOGGED_IN,
-    redirectUrl: Routes.Auth.Login,
-  }
-);
+// export default withAuth(
+//   withPermissions(UsersPage, {
+//     requiredPermissions: {
+//       entity: Namespaces.Users,
+//       action: CRUD_ACTION.CREATE,
+//     },
+//     redirectUrl: Routes.Permissions.Forbidden,
+//   }),
+//   {
+//     mode: AUTH_MODE.LOGGED_IN,
+//     redirectUrl: Routes.Auth.Login,
+//   }
+// );
+
+export default withAuth(UsersPage, { mode: AUTH_MODE.LOGGED_IN, redirectUrl: Routes.Auth.Login });

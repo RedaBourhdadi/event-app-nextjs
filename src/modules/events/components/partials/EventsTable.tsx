@@ -1,7 +1,8 @@
 import Routes from '@common/defs/routes';
-import ItemsTable from '@common/components/partials/ItemsTable';
+import ItemsTable from '@modules/events/components/partials/ItemsTable';
+// import ItemsTable from '@common/components/partials/ItemsTable';
 import { Event } from '@modules/events/defs/types';
-import useUsers, { CreateOneInput, UpdateOneInput } from '@modules/events/hooks/api/useUsers';
+import useEvents2, { CreateOneInput, UpdateOneInput } from '@modules/events/hooks/api/useEvents2';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { GridColumns } from '@mui/x-data-grid';
@@ -11,45 +12,43 @@ import { CrudRow } from '@common/defs/types';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
+//
 interface Row extends CrudRow {
-  email: string;
-  createdAt: string;
-  roles: string[];
+  title: string;
+  location: string;
+  date: string;
+  maxAttendees: number;
+  userId: number;
 }
 
-const UsersTable = () => {
+const EventsTable = () => {
   const { t, i18n } = useTranslation(['user']);
   const columns: GridColumns<Row> = [
+    // {
+    //   field: 'id',
+    //   headerName: 'ID',
+    //   width: 100,
+    // },
+
     {
-      field: 'id',
-      headerName: 'ID',
-      width: 100,
+      field: 'title',
+      headerName: t('user:list.title'),
+      flex: 1,
     },
     {
-      field: 'email',
+      field: 'location',
       headerName: t('user:list.email'),
       flex: 1,
     },
     {
-      field: 'roles',
-      headerName: t('user:list.role'),
-      type: 'boolean',
-      width: 125,
-      renderCell: (params) => {
-        const { row: item } = params;
-        const { roles } = item;
-        if (roles.includes('admin')) {
-          return <CheckCircleIcon color="success" />;
-        }
-        return <CancelIcon color="error" />;
-      },
+      field: 'date',
+      headerName: 'date',
+      flex: 1,
     },
     {
-      field: 'createdAt',
-      headerName: t('user:list.created_at'),
-      type: 'dateTime',
+      field: 'maxAttendees',
+      headerName: 'max Attendees',
       flex: 1,
-      renderCell: (params) => dayjs(params.row.createdAt).format('DD/MM/YYYY hh:mm'),
     },
   ];
   const [translatedColumns, setTranslatedColumns] = useState<GridColumns<Row>>(columns);
@@ -60,10 +59,12 @@ const UsersTable = () => {
 
   const itemToRow = (item: Event): Row => {
     return {
-      id: item.location,
-      email: item.title,
-      createdAt: item.date,
-      roles: item.max_attendees,
+      id: item.id,
+      location: item.location,
+      title: item.title,
+      date: item.date,
+      maxAttendees: item.maxAttendees,
+      userId: item.userId,
     };
   };
 
@@ -72,16 +73,16 @@ const UsersTable = () => {
       <ItemsTable<Event, CreateOneInput, UpdateOneInput, Row>
         namespace={Namespaces.Users}
         routes={Routes.Events}
-        useItems={useUsers}
+        useItems={useEvents2}
         columns={translatedColumns}
         itemToRow={itemToRow}
-        showEdit={() => false}
-        showDelete={() => false}
-        showLock
+        // showEdit={() => true}
+        // showDelete={() => true}
         exportable
+        showLock
       />
     </>
   );
 };
 
-export default UsersTable;
+export default EventsTable;
