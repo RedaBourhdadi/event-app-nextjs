@@ -44,9 +44,7 @@ const CreateEventForm = (_props: CreateEventFormProps) => {
       if (response.success) {
         router.push(Routes.Events.ReadAll);
       } else if (response.errors) {
-        // Handle API error here
         console.error('Submission error:', response.errors);
-        // You might want to set form errors here using _methods.setError()
       }
     } catch (errors) {
       console.error('Unexpected error:', errors);

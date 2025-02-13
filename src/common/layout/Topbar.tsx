@@ -25,6 +25,7 @@ import { ArrowForwardIos, Logout } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { setUserLanguage } from '@common/components/lib/utils/language';
+import { NotificationBell } from '@common/components/partials/NotificationBell';
 
 interface TopbarItem {
   label: string;
@@ -398,6 +399,11 @@ const Topbar = () => {
                 </ListItem>
               </>
             )}
+            {user ? (
+              <ListItem sx={{ width: 'fit-content' }}>
+                <NotificationBell />
+              </ListItem>
+            ) : null}
           </List>
           <IconButton
             onClick={() => toggleSidebar()}

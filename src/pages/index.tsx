@@ -1,30 +1,3 @@
-// import PageHeader from '@common/components/lib/partials/PageHeader';
-// import Routes from '@common/defs/routes';
-// import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
-// import { NextPage } from 'next';
-// import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-// import { useTranslation } from 'react-i18next';
-
-// const Index: NextPage = () => {
-//   const { t } = useTranslation(['home']);
-//   return (
-//     <>
-//       <PageHeader title={t('home:dashboard')} />
-//     </>
-//   );
-// };
-
-// export const getStaticProps = async ({ locale }: { locale: string }) => ({
-//   props: {
-//     ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'home'])),
-//   },
-// });
-// export default withAuth(Index, {
-//   mode: AUTH_MODE.LOGGED_IN,
-//   // redirectUrl: Routes.Auth.Login,
-//   redirectUrl: '/events',
-// });
-
 import React from 'react';
 import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
 import withPermissions from '@modules/permissions/hocs/withPermissions';
@@ -51,35 +24,13 @@ import useAuth from '@modules/auth/hooks/api/useAuth';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-// import Switch from '@mui/material/Switch';
-// import Divider from '@mui/material/Divider';
-// import Collapse from '@mui/material/Collapse';
-// import Checkbox from '@mui/material/Checkbox';
-// import Container from '@mui/material/Container';
-// import IconButton from '@mui/material/IconButton';
-// import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-// import ListSubheader from '@mui/material/ListSubheader';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemButton from '@mui/material/ListItemButton';
-// import readAll from '@modules/events/hooks/api/useUploads';
-// import { useEvents } from '@modules/events/hooks/api/useUploads';
 import useEvents, { CreateOneInput } from '@modules/events/hooks/api/useEvents';
 import { usesubEvens, CreateOneInputSub } from '@modules/events/hooks/api/useEvents2';
 import { Event } from '@modules/events/defs/types';
-
-// import Iconify from './iconify';
 import ComponentBlock from './events/component-block';
-
-// interface EventResponse {
-//   id: number;
-//   title: string;
-//   location: string;
-//   date: string;
-//   maxAttendees: number;
-//   userId: number;
-// }
 
 // const responsee: EventResponse[] = [];
 const EventsPage: NextPage = () => {
