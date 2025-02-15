@@ -20,10 +20,10 @@ const CreateEventForm = (_props: CreateEventFormProps) => {
   const U = user?.id || 0;
 
   const schema = Yup.object().shape({
-    title: Yup.string().required('Le champ est obligatoire'),
-    location: Yup.string().required('Le champ est obligatoire'),
-    date: Yup.string().required('La date est obligatoire'),
-    maxAttendees: Yup.number().required('Ce champ est obligatoire'),
+    title: Yup.string().required('This field is required'),
+    location: Yup.string().required('This field is required'),
+    date: Yup.string().required('The date is required'),
+    maxAttendees: Yup.number().required('This field is required'),
   });
   const defaultValues: CreateOneInput = {
     title: 'test',

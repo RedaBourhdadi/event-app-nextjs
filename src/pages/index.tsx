@@ -7,7 +7,7 @@ import Routes from '@common/defs/routes';
 // import EventsTable from '@modules/events/components/partials/EventsTable';
 import CustomBreadcrumbs from '@common/components/lib/navigation/CustomBreadCrumbs';
 import { useRouter } from 'next/router';
-import { Add } from '@mui/icons-material';
+import { Add, Login } from '@mui/icons-material';
 import PageHeader from '@common/components/lib/partials/PageHeader';
 import { CRUD_ACTION } from '@common/defs/types';
 import Namespaces from '@common/defs/namespaces';
@@ -44,6 +44,7 @@ const EventsPage: NextPage = () => {
 
   const fetchEvents = async (): Promise<Event[]> => {
     const response = await readAll();
+    // console.log(response.data?.items);
     return response.data?.items || [];
   };
 
@@ -91,16 +92,24 @@ const EventsPage: NextPage = () => {
       <PageHeader
         // title={t(`user:${Labels.Users.ReadAll}`)}
         title="Events List"
-        action={{
-          label: t(`user:${Labels.Users.NewOne}`),
-          startIcon: <Add />,
-          // onClick: () => router.push(Routes.Users.CreateOne),
-          onClick: () => router.push('events/create'),
-          // permission: {
-          //   entity: Namespaces.Users,
-          //   action: CRUD_ACTION.CREATE,
-          // },
-        }}
+        action={
+          user?.id
+            ? {
+                label: t(`user:${Labels.Users.NewOne}`),
+                startIcon: <Add />,
+                // onClick: () => router.push(Routes.Users.CreateOne),
+                onClick: () => router.push('events/create'),
+                // permission: {
+                //   entity: Namespaces.Users,
+                //   action: CRUD_ACTION.CREATE,
+                // },
+              }
+            : {
+                label: t(`user:${Labels.Users.NewOne}`),
+                startIcon: <Login />,
+                onClick: () => router.push('/auth/login'),
+              }
+        }
       />
       {/* <CustomBreadcrumbs
         links={[
@@ -123,7 +132,19 @@ const EventsPage: NextPage = () => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={item.title}
-                  secondary={`Location : ${item.location} - Date : ${item.date} - Max Attendees : ${item.maxAttendees} `}
+                  secondary={
+                    <span style={{ display: 'flex', gap: '16px' }}>
+                      <span>
+                        <strong>Location:</strong> {item.location}
+                      </span>
+                      <span>
+                        <strong>Date:</strong> {item.date}
+                      </span>
+                      <span>
+                        <strong>Attendees:</strong> {item.attendeesCount}/{item.maxAttendees}
+                      </span>
+                    </span>
+                  }
                 />
               </ListItemButton>
             ))}
@@ -135,21 +156,31 @@ const EventsPage: NextPage = () => {
         title="Event Details"
         open={isDialogOpen}
         onClose={handleCloseDialog}
-        action={
-          user?.id ? (
+        action={(() => {
+          if (!user?.id) {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => router.push(Routes.Auth.Login)}
+              >
+                Login to Register
+              </Button>
+            );
+          }
+          if ((selectedItem?.attendeesCount ?? 0) >= (selectedItem?.maxAttendees ?? 0)) {
+            return (
+              <Button variant="contained" color="error" disabled>
+                Event is Full
+              </Button>
+            );
+          }
+          return (
             <Button variant="contained" color="primary" onClick={handleViewDetails}>
-              register for the event
+              Register for the Event
             </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => router.push(Routes.Auth.Login)}
-            >
-              Login to Register
-            </Button>
-          )
-        }
+          );
+        })()}
         content={
           selectedItem && (
             <>
@@ -163,7 +194,10 @@ const EventsPage: NextPage = () => {
                 <strong>Date:</strong> {selectedItem.date}
               </p>
               <p>
-                <strong>Max Attendees:</strong> {selectedItem.maxAttendees}
+                <strong>Attendees: </strong>
+                {selectedItem?.attendeesCount}
+                <span>/</span>
+                {selectedItem?.maxAttendees}
               </p>
             </>
           )

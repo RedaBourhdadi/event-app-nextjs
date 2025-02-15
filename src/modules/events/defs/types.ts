@@ -7,6 +7,8 @@ export interface Event extends CrudObject {
   date: string;
   maxAttendees: number;
   userId: number;
+  attendeesCount?: number;
+
   // createdAt?: string;
   // updatedAt?: string;
 }

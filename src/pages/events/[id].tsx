@@ -7,21 +7,21 @@ import PageHeader from '@common/components/lib/partials/PageHeader';
 import CustomBreadcrumbs from '@common/components/lib/navigation/CustomBreadCrumbs';
 import { useEffect, useState } from 'react';
 import useProgressBar from '@common/hooks/useProgressBar';
-import { User } from '@modules/users/defs/types';
-import useUsers from '@modules/users/hooks/api/useUsers';
+import { Event } from '@modules/events/defs/types';
+import useEvents2 from '@modules/events/hooks/api/useEvents2';
 import { CRUD_ACTION, Id } from '@common/defs/types';
 import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
-import UpdateUserForm from '@modules/users/components/partials/UpdateUserForm';
+import UpdateUserForm from '@modules/events/components/partials/UpdateUserForm';
 import { useTranslation } from 'react-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const UsersPage: NextPage = () => {
+const EventsPage: NextPage = () => {
   const router = useRouter();
   const { start, stop } = useProgressBar();
-  const { readOne } = useUsers();
+  const { readOne } = useEvents2();
   const [loaded, setLoaded] = useState(false);
-  const [item, setItem] = useState<null | User>(null);
+  const [item, setItem] = useState<null | Event>(null);
   const id: Id = Number(router.query.id);
   const { t } = useTranslation(['user', 'common']);
 
@@ -40,6 +40,7 @@ const UsersPage: NextPage = () => {
   const fetchUser = async () => {
     if (id) {
       const { data } = await readOne(id);
+      console.log(data);
       if (data) {
         if (data.item) {
           setItem(data.item);
@@ -75,16 +76,18 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
   },
 });
 
-export default withAuth(
-  withPermissions(UsersPage, {
-    requiredPermissions: {
-      entity: Namespaces.Users,
-      action: CRUD_ACTION.UPDATE,
-    },
-    redirectUrl: Routes.Permissions.Forbidden,
-  }),
-  {
-    mode: AUTH_MODE.LOGGED_IN,
-    redirectUrl: Routes.Auth.Login,
-  }
-);
+// export default withAuth(
+//   withPermissions(EventsPage, {
+//     requiredPermissions: {
+//       entity: Namespaces.Users,
+//       action: CRUD_ACTION.UPDATE,
+//     },
+//     redirectUrl: Routes.Permissions.Forbidden,
+//   }),
+//   {
+//     mode: AUTH_MODE.LOGGED_IN,
+//     redirectUrl: Routes.Auth.Login,
+//   }
+// );
+
+export default withAuth(EventsPage, { mode: AUTH_MODE.LOGGED_IN, redirectUrl: Routes.Auth.Login });

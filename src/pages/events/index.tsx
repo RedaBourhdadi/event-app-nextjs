@@ -14,7 +14,7 @@ import Labels from '@common/defs/labels';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-const UsersPage: NextPage = () => {
+const EventsPage: NextPage = () => {
   const router = useRouter();
   const { t } = useTranslation(['user']);
   return (
@@ -45,7 +45,7 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
 });
 
 // export default withAuth(
-//   withPermissions(UsersPage, {
+//   withPermissions(EventsPage, {
 //     requiredPermissions: {
 //       entity: Namespaces.Users,
 //       action: CRUD_ACTION.READ,
@@ -58,4 +58,4 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
 //   }
 // );
 
-export default withAuth(UsersPage, { mode: AUTH_MODE.LOGGED_IN, redirectUrl: Routes.Auth.Login });
+export default withAuth(EventsPage, { mode: AUTH_MODE.LOGGED_IN, redirectUrl: Routes.Auth.Login });

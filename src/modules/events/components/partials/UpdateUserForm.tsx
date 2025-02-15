@@ -1,63 +1,55 @@
-import { RHFSelect, RHFTextField } from '@common/components/lib/react-hook-form';
+import { RHFTextField, RHFDatePicker2 } from '@common/components/lib/react-hook-form';
 import UpdateCrudItemForm from '@common/components/partials/UpdateCrudItemForm';
 import Routes from '@common/defs/routes';
 import { ROLES_OPTIONS } from '@modules/permissions/defs/options';
 import { ROLE } from '@modules/permissions/defs/types';
-import { User } from '@modules/users/defs/types';
-import useUsers, { UpdateOneInput } from '@modules/users/hooks/api/useUsers';
+import { Event } from '@modules/events/defs/types';
+import useEvents2, { UpdateOneInput } from '@modules/events/hooks/api/useEvents2';
 import { Grid, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 interface UpdateUserFormProps {
-  item: User;
+  item: Event;
 }
 
 const UpdateUserForm = (props: UpdateUserFormProps) => {
   const { item } = props;
   const { t } = useTranslation(['common']);
   const schema = Yup.object().shape({
-    email: Yup.string()
-      .email(t('common:email_format_incorrect'))
-      .required(t('common:field_required')),
-    password: Yup.string(),
-    role: Yup.mixed<ROLE>()
-      .oneOf(Object.values(ROLE), (_values) => {
-        return `${t('common:role_criteria')} ${ROLES_OPTIONS.map((option) => t(option.label)).join(
-          ', '
-        )}`;
-      })
-      .required(t('common:field_required')),
+    title: Yup.string().required('This field is required'),
+    location: Yup.string().required('This field is required'),
+    date: Yup.string().required('The date is required'),
+    maxAttendees: Yup.number().required('This field is required'),
   });
   const defaultValues: UpdateOneInput = {
-    email: item.email,
-    password: '',
-    role: item.rolesNames[0],
+    title: item.title,
+    location: item.location,
+    date: new Date(item.date),
+    maxAttendees: item.maxAttendees,
+    userId: item.userId,
   };
   return (
     <>
-      <UpdateCrudItemForm<User, UpdateOneInput>
+      <UpdateCrudItemForm<Event, UpdateOneInput>
         item={item}
-        routes={Routes.Users}
-        useItems={useUsers}
+        routes={Routes.Events}
+        useItems={useEvents2}
         schema={schema}
         defaultValues={defaultValues}
       >
         <Grid container spacing={3} sx={{ padding: 6 }}>
           <Grid item xs={6}>
-            <RHFTextField name="email" label={t('common:email')} />
+            <RHFTextField name="title" label="title" />
           </Grid>
           <Grid item xs={6}>
-            <RHFTextField name="password" label={t('common:password')} type="password" />
+            <RHFTextField name="location" label="location" type="text" />
           </Grid>
           <Grid item xs={6}>
-            <RHFSelect name="role" label={t('common:role')}>
-              {ROLES_OPTIONS.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {t(option.label)}
-                </MenuItem>
-              ))}
-            </RHFSelect>
+            <RHFDatePicker2 name="date" />
+          </Grid>
+          <Grid item xs={6}>
+            <RHFTextField name="maxAttendees" label="maxAttendees" type="number" />
           </Grid>
         </Grid>
       </UpdateCrudItemForm>
