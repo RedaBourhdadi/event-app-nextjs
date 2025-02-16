@@ -2,7 +2,14 @@ import MenuPopover from '@common/components/lib/utils/MenuPopover/MenuPopover';
 import { Any, CRUD_ACTION, CrudAppRoutes, CrudRow, Id } from '@common/defs/types';
 import usePermissions from '@modules/permissions/hooks/usePermissions';
 import { FilterParam, SortParam, UseItems, UseItemsOptions } from '@common/hooks/useItems';
-import { DeleteOutline, Edit, MoreVert, LockTwoTone, LockOpen } from '@mui/icons-material';
+import {
+  DeleteOutline,
+  Edit,
+  MoreVert,
+  LockTwoTone,
+  LockOpen,
+  CommentsDisabledOutlined,
+} from '@mui/icons-material';
 import { Box, Card, IconButton, MenuItem } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -109,6 +116,7 @@ const ItemsTable = <Item, CreateOneInput, UpdateOneInput, Row extends CrudRow>(
   useEffect(() => {
     if (items && items.length > 0) {
       const itemsRows = items.map(itemToRow);
+      console.log(itemsRows);
       setRows([...itemsRows]);
 
       const actionsColumn: GridEnrichedColDef<Row> = {

@@ -1,19 +1,11 @@
 import { CrudObject } from '@common/defs/types';
+import { Event } from '@modules/events/defs/types';
 
-export interface Event extends CrudObject {
-  // id: number;
-  title: string;
-  location: string;
-  date: string;
-  maxAttendees: number;
-  userId: number;
-  // createdAt?: string;
-  // updatedAt?: string;
-}
-export interface sub extends CrudObject {
+export interface Attendee extends CrudObject {
   // id: number;
   eventId: number;
   userId: number;
+  event?: Event;
   // createdAt?: string;
   // updatedAt?: string;
 }

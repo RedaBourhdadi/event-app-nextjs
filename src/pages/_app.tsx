@@ -25,6 +25,8 @@ import { appWithTranslation } from 'next-i18next';
 import { frFR, enUS, esES } from '@mui/material/locale';
 import { getUserLanguage } from '@common/components/lib/utils/language';
 import { useRouter } from 'next/router';
+// import MainLayout from '@common/layout/MainLayout';
+import DashboardLayout from '@common/layout/DashboardLayout';
 
 // declare module '@mui/material/Button' { // If we add a color, then we need to add the color in each component
 //    interface ButtonPropsColorOverrides {
@@ -33,13 +35,23 @@ import { useRouter } from 'next/router';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const { initialized: authInitialized } = useAuth();
+  const router = useRouter();
+
   if (!authInitialized) {
     return <LoadingScreen />;
   }
+
+  const isDashboardRoute = (path: string): boolean => {
+    const dashboardPaths = ['/events', '/users', '/participation'];
+    return dashboardPaths.some((route) => path.startsWith(route));
+  };
+
+  const Layoutt = isDashboardRoute(router.pathname) ? DashboardLayout : Layout;
+
   return (
-    <Layout>
+    <Layoutt>
       <Component {...pageProps} />
-    </Layout>
+    </Layoutt>
   );
 };
 const AppWrapper = (props: AppProps) => {
