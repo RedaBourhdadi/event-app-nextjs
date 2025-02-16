@@ -23,13 +23,13 @@ const CreateEventForm = (_props: CreateEventFormProps) => {
     title: Yup.string().required('This field is required'),
     location: Yup.string().required('This field is required'),
     date: Yup.string().required('The date is required'),
-    maxAttendees: Yup.number().required('This field is required'),
+    maxAttendees: Yup.number().required('This field is required').min(1, 'This field is required'),
   });
   const defaultValues: CreateOneInput = {
-    title: 'test',
-    location: 'tesst',
-    date: '2025-03-13',
-    maxAttendees: 3,
+    title: '',
+    location: '',
+    date: new Date().toISOString().split('T')[0],
+    maxAttendees: 0,
     userId: U,
     // userId: user?.id || 0,
 

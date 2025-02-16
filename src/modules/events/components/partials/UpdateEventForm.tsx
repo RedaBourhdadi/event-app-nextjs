@@ -9,11 +9,11 @@ import { Grid, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-interface UpdateUserFormProps {
+interface UpdateEventFormProps {
   item: Event;
 }
 
-const UpdateUserForm = (props: UpdateUserFormProps) => {
+const UpdateEventForm = (props: UpdateEventFormProps) => {
   const { item } = props;
   const { t } = useTranslation(['common']);
   const schema = Yup.object().shape({
@@ -25,7 +25,7 @@ const UpdateUserForm = (props: UpdateUserFormProps) => {
   const defaultValues: UpdateOneInput = {
     title: item.title,
     location: item.location,
-    date: new Date(item.date),
+    date: new Date(item.date).toISOString().split('T')[0],
     maxAttendees: item.maxAttendees,
     userId: item.userId,
   };
@@ -57,4 +57,4 @@ const UpdateUserForm = (props: UpdateUserFormProps) => {
   );
 };
 
-export default UpdateUserForm;
+export default UpdateEventForm;

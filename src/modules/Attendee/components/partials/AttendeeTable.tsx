@@ -58,6 +58,10 @@ const AttendeeTable = () => {
   }, [t, i18n.language]);
 
   const itemToRow = (item: Attendee): Row => {
+    if (!item.event) {
+      throw new Error('Event is undefined');
+      // or return a default row
+    }
     return {
       id: item.event.id,
       location: item.event.location,

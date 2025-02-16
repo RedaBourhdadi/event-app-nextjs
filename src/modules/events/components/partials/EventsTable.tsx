@@ -22,7 +22,7 @@ interface Row extends CrudRow {
 }
 
 const EventsTable = () => {
-  const { t, i18n } = useTranslation(['user']);
+  const { t, i18n } = useTranslation(['event']);
   const columns: GridColumns<Row> = [
     // {
     //   field: 'id',
@@ -32,12 +32,12 @@ const EventsTable = () => {
 
     {
       field: 'title',
-      headerName: t('user:list.title'),
+      headerName: 'title',
       flex: 1,
     },
     {
       field: 'location',
-      headerName: t('user:list.email'),
+      headerName: 'location',
       flex: 1,
     },
     {

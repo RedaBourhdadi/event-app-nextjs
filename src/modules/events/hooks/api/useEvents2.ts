@@ -18,7 +18,7 @@ export interface CreateOneInputSub {
 export interface UpdateOneInput {
   title: string;
   location: string;
-  date: Date;
+  date: string;
   maxAttendees: number;
   userId: number;
 }

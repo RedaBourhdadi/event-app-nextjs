@@ -1,16 +1,10 @@
 import React from 'react';
 import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
-import withPermissions from '@modules/permissions/hocs/withPermissions';
 import { NextPage } from 'next';
 
 import Routes from '@common/defs/routes';
-// import EventsTable from '@modules/events/components/partials/EventsTable';
-import CustomBreadcrumbs from '@common/components/lib/navigation/CustomBreadCrumbs';
 import { useRouter } from 'next/router';
-import { Add, Login } from '@mui/icons-material';
 import PageHeader from '@common/components/lib/partials/PageHeader';
-import { CRUD_ACTION } from '@common/defs/types';
-import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
@@ -19,23 +13,20 @@ import { Button, ListItem, Box } from '@mui/material';
 import useAuth from '@modules/auth/hooks/api/useAuth';
 
 // @mui
-// import Masonry from '@mui/lab/Masonry';
-// import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import ListItemButton from '@mui/material/ListItemButton';
 import useEvents from '@modules/attendee/hooks/api/useEvents';
 import useEvents2 from '@modules/attendee/hooks/api/useEvents2';
 import { Attendee } from '@modules/attendee/defs/types';
-import ComponentBlock from '../events/component-block';
+import ComponentBlock from '@modules/events/components/component-block';
 
 // const responsee: EventResponse[] = [];
 const ParticipationsPage: NextPage = () => {
-  const { user } = useAuth();
-  const router = useRouter();
+  // const { user } = useAuth();
+  // const router = useRouter();
   const { readAll } = useEvents();
   const { deleteOne } = useEvents2();
   const [items, setItems] = React.useState<Attendee[]>([]);
@@ -84,73 +75,55 @@ const ParticipationsPage: NextPage = () => {
     loadEvents();
   }, []);
 
-  const { t } = useTranslation(['user']);
+  const { t } = useTranslation(['event']);
   return (
     <>
       <PageHeader
-        // title={t(`user:${Labels.Users.ReadAll}`)}
-        title="Events List"
-        action={
-          user?.id
-            ? {
-                label: t(`user:${Labels.Users.NewOne}`),
-                startIcon: <Add />,
-                // onClick: () => router.push(Routes.Users.CreateOne),
-                onClick: () => router.push('events/create'),
-                // permission: {
-                //   entity: Namespaces.Users,
-                //   action: CRUD_ACTION.CREATE,
-                // },
-              }
-            : {
-                label: t(`user:${Labels.Users.NewOne}`),
-                startIcon: <Login />,
-                onClick: () => router.push('/auth/login'),
-              }
-        }
+        title={t(`event:${Labels.Events.Items}`)}
+        // title="Events List"
+        // action={}
       />
-      {/* <CustomBreadcrumbs
-        links={[
-          { name: t('common:dashboard'), href: Routes.Common.Home },
-          { name: t(`user:${Labels.Users.Items}`) },
-        ]}
-      /> */}
-      {/* <EventsTable /> */}
 
       <ComponentBlock>
         <Paper variant="outlined" sx={{ width: 1 }}>
           <List>
-            {items.map((item) => (
-              <ListItem key={item.id}>
-                <ListItemAvatar>
-                  <Avatar>
-                    {/* <Iconify icon="ic:baseline-image" width={24} /> */}
-                    {item.event?.title[0]}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        gap: 2,
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <span>{item.event?.title}</span>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => handleOpenCancelDialog(item)}
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  }
-                />
+            {items.length === 0 ? (
+              <ListItem>
+                <ListItemText primary="No participations available" />
               </ListItem>
-            ))}
+            ) : (
+              items.map((item) => (
+                <ListItem key={item.id}>
+                  <ListItemAvatar>
+                    <Avatar>
+                      {/* <Iconify icon="ic:baseline-image" width={24} /> */}
+                      {item.event?.title[0]}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          gap: 2,
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <span>{item.event?.title}</span>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleOpenCancelDialog(item)}
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                    }
+                  />
+                </ListItem>
+              ))
+            )}
           </List>
         </Paper>
       </ComponentBlock>
@@ -170,72 +143,15 @@ const ParticipationsPage: NextPage = () => {
           </p>
         }
       />
-
-      {/* <ConfirmDialog
-        title="Event Details"
-        open={isDialogOpen}
-        onClose={handleCloseDialog}
-        action={(() => {
-          if ((selectedItem?.attendeesCount ?? 0) >= (selectedItem?.maxAttendees ?? 0)) {
-            return (
-              <Button variant="contained" color="error" disabled>
-                Event is Full
-              </Button>
-            );
-          }
-          return (
-            <Button variant="contained" color="primary" onClick={handleViewDetails}>
-              Register for the Event
-            </Button>
-          );
-        })()}
-        content={
-          selectedItem && (
-            <>
-              <p>
-                <strong>Title:</strong> {selectedItem.title}
-              </p>
-              <p>
-                <strong>Location:</strong> {selectedItem.location}
-              </p>
-              <p>
-                <strong>Date:</strong> {selectedItem.date}
-              </p>
-              <p>
-                <strong>Attendees: </strong>
-                {selectedItem?.attendeesCount}
-                <span>/</span>
-                {selectedItem?.maxAttendees}
-              </p>
-            </>
-          )
-        }
-      /> */}
     </>
   );
 };
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'user', 'common'])),
+    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'event', 'common'])),
   },
 });
-
-// export default withAuth(
-//   withPermissions(EventsPage, {
-//     requiredPermissions: {
-//       entity: Namespaces.Users,
-//       action: CRUD_ACTION.READ,
-//     },
-//     redirectUrl: Routes.Permissions.Forbidden,
-//   }),
-//   {
-//     mode: AUTH_MODE.LOGGED_IN,
-//     redirectUrl: Routes.Auth.Login,
-//   }
-// );
-
-// export default ParticipationsPage;
 
 export default withAuth(ParticipationsPage, {
   mode: AUTH_MODE.LOGGED_IN,

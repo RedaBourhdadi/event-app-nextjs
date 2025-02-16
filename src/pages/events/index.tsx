@@ -1,36 +1,32 @@
 import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
-import withPermissions from '@modules/permissions/hocs/withPermissions';
 import { NextPage } from 'next';
 import Routes from '@common/defs/routes';
 import EventsTable from '@modules/events/components/partials/EventsTable';
-// import EventsTable from '@';
 import CustomBreadcrumbs from '@common/components/lib/navigation/CustomBreadCrumbs';
 import { useRouter } from 'next/router';
 import { Add } from '@mui/icons-material';
 import PageHeader from '@common/components/lib/partials/PageHeader';
-import { CRUD_ACTION } from '@common/defs/types';
-import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
 const EventsPage: NextPage = () => {
   const router = useRouter();
-  const { t } = useTranslation(['user']);
+  const { t } = useTranslation(['event']);
   return (
     <>
       <PageHeader
-        title={t(`user:${Labels.Users.ReadAll}`)}
+        title={t(`event:${Labels.Events.Items}`)}
         action={{
-          label: t(`user:${Labels.Users.NewOne}`),
+          label: t(`event:${Labels.Events.CreateNewOne}`),
           startIcon: <Add />,
-          onClick: () => router.push(Routes.Users.CreateOne),
+          onClick: () => router.push(Routes.Events.CreateOne),
         }}
       />
       <CustomBreadcrumbs
         links={[
-          { name: t('common:dashboard'), href: Routes.Common.Home },
-          { name: t(`user:${Labels.Users.Items}`) },
+          { name: t('common:Home'), href: Routes.Common.Home },
+          { name: t(`event:${Labels.Events.Items}`) },
         ]}
       />
       <EventsTable />
@@ -40,22 +36,8 @@ const EventsPage: NextPage = () => {
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'user', 'common'])),
+    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'event', 'common'])),
   },
 });
-
-// export default withAuth(
-//   withPermissions(EventsPage, {
-//     requiredPermissions: {
-//       entity: Namespaces.Users,
-//       action: CRUD_ACTION.READ,
-//     },
-//     redirectUrl: Routes.Permissions.Forbidden,
-//   }),
-//   {
-//     mode: AUTH_MODE.LOGGED_IN,
-//     redirectUrl: Routes.Auth.Login,
-//   }
-// );
 
 export default withAuth(EventsPage, { mode: AUTH_MODE.LOGGED_IN, redirectUrl: Routes.Auth.Login });

@@ -21,19 +21,7 @@ export interface UpsertUploadsInput extends CreateOneInput {}
 
 interface UseUploadsResponse {
   items: Event[] | null;
-  createOne: (
-    _input: CreateOneInput,
-    options?: FetchApiOptions
-  ) => Promise<ApiResponse<{ item: Event }>>;
-  readOne: (id: Id, options?: FetchApiOptions) => Promise<ApiResponse<{ item: Event }>>;
   readAll: (options?: FetchApiOptions) => Promise<ApiResponse<{ items: Event[] }>>;
-  updateOne: (
-    id: Id,
-    _input: UpdateOneInput,
-    options?: FetchApiOptions
-  ) => Promise<ApiResponse<{ item: Event }>>;
-  deleteOne: (id: Id, options?: FetchApiOptions) => Promise<ApiResponse<{ item: Event | null }>>;
-  deleteMulti: (ids: Id[], options?: FetchApiOptions) => Promise<ApiResponse<null>>;
 }
 
 interface UseUploadsOptions {
@@ -60,33 +48,6 @@ const useEvents = (opts: UseUploadsOptions = defaultOptions): UseUploadsResponse
     setItems(data ?? null);
   }, [data]);
 
-  const createOne = async (
-    input: CreateOneInput,
-    options?: FetchApiOptions
-  ): Promise<ApiResponse<{ item: Event }>> => {
-    const formData = new FormData();
-    // formData.append('file', input.file);
-    const response = await fetchApi<{ item: Event }>(ApiRoutes.Uploads.CreateOne, {
-      method: 'POST',
-      data: formData,
-      ...options,
-    });
-
-    if (response.success) {
-      mutate();
-    }
-
-    return response;
-  };
-
-  const readOne = async (id: Id, options?: FetchApiOptions) => {
-    const response = await fetchApi<{ item: Event }>(
-      ApiRoutes.Uploads.ReadOne.replace('{id}', id.toString()),
-      options
-    );
-
-    return response;
-  };
   const readAll = async (options?: FetchApiOptions) => {
     const response = await fetchApi<{ items: Event[] }>('/', options);
 
@@ -97,67 +58,9 @@ const useEvents = (opts: UseUploadsOptions = defaultOptions): UseUploadsResponse
     return response;
   };
 
-  const updateOne = async (
-    id: Id,
-    input: UpdateOneInput,
-    options?: FetchApiOptions
-  ): Promise<ApiResponse<{ item: Event }>> => {
-    const formData = new FormData();
-    // formData.append('file', input.file);
-    const response = await fetchApi<{ item: Event }>(
-      ApiRoutes.Uploads.UpdateOne.replace('{id}', id.toString()),
-      {
-        method: 'POST',
-        data: formData,
-        ...options,
-      }
-    );
-
-    if (response.success) {
-      mutate();
-    }
-
-    return response;
-  };
-
-  const deleteOne = async (id: Id, options?: FetchApiOptions) => {
-    const response = await fetchApi<{ item: Event }>(
-      ApiRoutes.Uploads.DeleteOne.replace('{id}', id.toString()),
-      {
-        method: 'DELETE',
-        ...options,
-      }
-    );
-
-    if (response.success) {
-      mutate();
-    }
-
-    return response;
-  };
-
-  const deleteMulti = async (ids: Id[], options?: FetchApiOptions) => {
-    const response = await fetchApi<null>(ApiRoutes.Uploads.ReadAll, {
-      method: 'DELETE',
-      data: { ids },
-      ...options,
-    });
-
-    if (response.success) {
-      mutate();
-    }
-
-    return response;
-  };
-
   return {
     items,
-    createOne,
-    readOne,
     readAll,
-    updateOne,
-    deleteOne,
-    deleteMulti,
   };
 };
 

@@ -6,6 +6,7 @@ import Permissions from '@modules/permissions/defs/routes';
 const Common = {
   Home: '/',
   NotFound: '/404',
+  Participation: '/participation',
 };
 
 const Routes = {

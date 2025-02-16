@@ -1,5 +1,5 @@
 import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
-import withPermissions from '@modules/permissions/hocs/withPermissions';
+// import withPermissions from '@modules/permissions/hocs/withPermissions';
 import { NextPage } from 'next';
 import Routes from '@common/defs/routes';
 import { useRouter } from 'next/router';
@@ -9,10 +9,10 @@ import { useEffect, useState } from 'react';
 import useProgressBar from '@common/hooks/useProgressBar';
 import { Event } from '@modules/events/defs/types';
 import useEvents2 from '@modules/events/hooks/api/useEvents2';
-import { CRUD_ACTION, Id } from '@common/defs/types';
-import Namespaces from '@common/defs/namespaces';
+import { Id } from '@common/defs/types';
+// import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
-import UpdateUserForm from '@modules/events/components/partials/UpdateUserForm';
+import UpdateEventForm from '@modules/events/components/partials/UpdateEventForm';
 import { useTranslation } from 'react-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -23,7 +23,7 @@ const EventsPage: NextPage = () => {
   const [loaded, setLoaded] = useState(false);
   const [item, setItem] = useState<null | Event>(null);
   const id: Id = Number(router.query.id);
-  const { t } = useTranslation(['user', 'common']);
+  const { t } = useTranslation(['event', 'common']);
 
   useEffect(() => {
     if (loaded) {
@@ -34,10 +34,10 @@ const EventsPage: NextPage = () => {
   }, [loaded]);
 
   useEffect(() => {
-    fetchUser();
+    fetchEvent();
   }, [id]);
 
-  const fetchUser = async () => {
+  const fetchEvent = async () => {
     if (id) {
       const { data } = await readOne(id);
       console.log(data);
@@ -52,16 +52,16 @@ const EventsPage: NextPage = () => {
 
   return (
     <>
-      <PageHeader title={t(`user:${Labels.Users.EditOne}`)} />
+      <PageHeader title={t(`event:${Labels.Events.EditOne}`)} />
       <CustomBreadcrumbs
         links={[
-          { name: t('common:dashboard'), href: Routes.Common.Home },
-          { name: t(`user:${Labels.Users.Items}`), href: Routes.Users.ReadAll },
-          { name: item ? item.email : t(`user:${Labels.Users.EditOne}`) },
+          { name: t('common:Home'), href: Routes.Common.Home },
+          { name: t(`event:${Labels.Events.Items}`), href: Routes.Events.ReadAll },
+          { name: item ? item.title : t(`event:${Labels.Events.EditOne}`) },
         ]}
       />
 
-      {item && <UpdateUserForm item={item} />}
+      {item && <UpdateEventForm item={item} />}
     </>
   );
 };
@@ -72,7 +72,7 @@ export const getStaticPaths = () => {
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'user', 'common'])),
+    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'event', 'common'])),
   },
 });
 

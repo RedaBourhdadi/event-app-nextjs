@@ -53,9 +53,9 @@ const Topbar = () => {
   };
   const navItems: TopbarItem[] = [
     {
-      label: t('topbar:home'),
-      link: Routes.Common.Home,
-      onClick: () => router.push(Routes.Common.Home),
+      label: 'Your Events',
+      link: Routes.Events.ReadAll,
+      onClick: () => router.push(Routes.Events.ReadAll),
     },
     {
       label: t('topbar:language'),

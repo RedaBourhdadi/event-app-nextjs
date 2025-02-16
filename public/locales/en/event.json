@@ -1,0 +1,16 @@
+{
+  "common": {
+    "create_new_one": "Create a new Event",
+    "edit_one": "Edit the Event",
+    "items": "Events",
+    "new_one": "New Event",
+    "read_all": "Event list",
+    "login_to_register": "Login to Register"
+  },
+  "list": {
+    "title": "Title",
+    "location": "Location",
+    "date": "Date",
+    "maxAttendees": "Max Attendees"
+  }
+}

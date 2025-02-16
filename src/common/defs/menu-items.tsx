@@ -16,7 +16,7 @@ export const menuItems: NavGroup[] = [
       {
         text: 'Participation',
         icon: <EventSeat />,
-        link: Routes.Common.Home,
+        link: Routes.Common.Participation,
       },
       {
         text: 'Users',

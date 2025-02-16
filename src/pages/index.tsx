@@ -1,21 +1,17 @@
 import React from 'react';
-import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
-import withPermissions from '@modules/permissions/hocs/withPermissions';
+// import withAuth, { AUTH_MODE } from '@modules/auth/hocs/withAuth';
+// import withPermissions from '@modules/permissions/hocs/withPermissions';
 import { NextPage } from 'next';
 
 import Routes from '@common/defs/routes';
-// import EventsTable from '@modules/events/components/partials/EventsTable';
-import CustomBreadcrumbs from '@common/components/lib/navigation/CustomBreadCrumbs';
 import { useRouter } from 'next/router';
 import { Add, Login } from '@mui/icons-material';
 import PageHeader from '@common/components/lib/partials/PageHeader';
-import { CRUD_ACTION } from '@common/defs/types';
-import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 import ConfirmDialog from '@common/components/lib/feedbacks/ConfirmDialog';
-import { Button } from '@mui/material';
+import { Button, ListItem } from '@mui/material';
 import useAuth from '@modules/auth/hooks/api/useAuth';
 
 // @mui
@@ -27,10 +23,10 @@ import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
-import useEvents, { CreateOneInput } from '@modules/events/hooks/api/useEvents';
+import useEvents from '@modules/events/hooks/api/useEvents';
 import { usesubEvens, CreateOneInputSub } from '@modules/events/hooks/api/useEvents2';
 import { Event } from '@modules/events/defs/types';
-import ComponentBlock from './events/component-block';
+import ComponentBlock from '@modules/events/components/component-block';
 
 // const responsee: EventResponse[] = [];
 const EventsPage: NextPage = () => {
@@ -86,16 +82,16 @@ const EventsPage: NextPage = () => {
     loadEvents();
   }, []);
 
-  const { t } = useTranslation(['user']);
+  const { t } = useTranslation(['event']);
   return (
     <>
       <PageHeader
-        // title={t(`user:${Labels.Users.ReadAll}`)}
-        title="Events List"
+        title={t(`event:${Labels.Events.ReadAll}`)}
+        // title="Events List"
         action={
           user?.id
             ? {
-                label: t(`user:${Labels.Users.NewOne}`),
+                label: t(`event:${Labels.Events.CreateNewOne}`),
                 startIcon: <Add />,
                 // onClick: () => router.push(Routes.Users.CreateOne),
                 onClick: () => router.push('events/create'),
@@ -105,7 +101,7 @@ const EventsPage: NextPage = () => {
                 // },
               }
             : {
-                label: t(`user:${Labels.Users.NewOne}`),
+                label: t(`event:${Labels.Events.CreateNewOne}`),
                 startIcon: <Login />,
                 onClick: () => router.push('/auth/login'),
               }
@@ -114,40 +110,53 @@ const EventsPage: NextPage = () => {
       {/* <CustomBreadcrumbs
         links={[
           { name: t('common:dashboard'), href: Routes.Common.Home },
-          { name: t(`user:${Labels.Users.Items}`) },
+          { name: t(`event:${Labels.Events.Items}`) },
         ]}
       /> */}
       {/* <EventsTable /> */}
 
-      <ComponentBlock>
+      <ComponentBlock
+        sx={{
+          // p: 5,
+          minHeight: 180,
+          // height: '100%',
+          // ...sx,
+        }}
+      >
         <Paper variant="outlined" sx={{ width: 1 }}>
           <List>
-            {items.map((item) => (
-              <ListItemButton key={item.id} onClick={() => handleOpenDialog(item)}>
-                <ListItemAvatar>
-                  <Avatar>
-                    {/* <Iconify icon="ic:baseline-image" width={24} /> */}
-                    {item.title[0]}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={item.title}
-                  secondary={
-                    <span style={{ display: 'flex', gap: '16px' }}>
-                      <span>
-                        <strong>Location:</strong> {item.location}
+            {items.length === 0 ? (
+              <ListItem>
+                <ListItemText primary="No events available" />
+              </ListItem>
+            ) : (
+              items.map((item) => (
+                <ListItemButton key={item.id} onClick={() => handleOpenDialog(item)}>
+                  <ListItemAvatar>
+                    <Avatar>
+                      {/* <Iconify icon="ic:baseline-image" width={24} /> */}
+                      {item.title[0]}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.title}
+                    secondary={
+                      <span style={{ display: 'flex', gap: '16px' }}>
+                        <span>
+                          <strong>Location:</strong> {item.location}
+                        </span>
+                        <span>
+                          <strong>Date:</strong> {item.date}
+                        </span>
+                        <span>
+                          <strong>Attendees:</strong> {item.attendeesCount}/{item.maxAttendees}
+                        </span>
                       </span>
-                      <span>
-                        <strong>Date:</strong> {item.date}
-                      </span>
-                      <span>
-                        <strong>Attendees:</strong> {item.attendeesCount}/{item.maxAttendees}
-                      </span>
-                    </span>
-                  }
-                />
-              </ListItemButton>
-            ))}
+                    }
+                  />
+                </ListItemButton>
+              ))
+            )}
           </List>
         </Paper>
       </ComponentBlock>
@@ -209,7 +218,7 @@ const EventsPage: NextPage = () => {
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'user', 'common'])),
+    ...(await serverSideTranslations(locale, ['topbar', 'footer', 'leftbar', 'event', 'common'])),
   },
 });
 

@@ -11,9 +11,11 @@ import * as Yup from 'yup';
 import Link from '@mui/material/Link';
 import Routes from '@common/defs/routes';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 
 const LoginForm = () => {
   const { login } = useAuth();
+  const router = useRouter();
   const { t } = useTranslation(['sign-in', 'common']);
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -34,13 +36,17 @@ const LoginForm = () => {
     formState: { isSubmitting },
   } = methods;
   const onSubmit = async (data: LoginInput) => {
-    await login(
+    const rest = await login(
       {
         email: data.email,
         password: data.password,
       },
       { displayProgress: true, displaySuccess: true }
     );
+
+    if (rest.success) {
+      router.push('/');
+    }
   };
   return (
     <>
